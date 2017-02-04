@@ -30,7 +30,8 @@ class Header extends Component {
 
     getStateFromStores() {
         return {
-            userRole: ChannelStore.getUserRole(),
+            channelUsers: ChannelStore.getChannelUsers(),
+            userRole: ChannelStore.getUserRole()
         }
     }
 
@@ -55,7 +56,7 @@ class Header extends Component {
         return(
             <div style={Styles} className="header">
                 <div style={ Styles.buttonOutline } className="button-outline">
-                    In this conversation: {6}
+                    In this conversation: {this.state.channelUsers.length}
                 </div>
                 <div style={ Styles.buttonOutline } className="button-outline">
                     Role: {this.state.userRole}

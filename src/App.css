@@ -1,11 +1,4 @@
-#root {
-  background-color: #F2F2F2;
-  width: 100vw;
-  /*height: 100vh;*/
-  padding: 15vh 0;
-}
-
- /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
+/*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
 
    /**
     * 1. Change the default font family in all browsers (opinionated).
@@ -471,6 +464,19 @@ template {
 /* Styles
    ========================================================================== */
 
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+#root {
+  background-color: #F2F2F2;
+  width: 100vw;
+  height: 100vh;
+  padding: 15vh 0;
+}
 
 p {
   color: #4C4C4C;

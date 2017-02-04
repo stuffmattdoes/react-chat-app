@@ -2,16 +2,23 @@ import dispatcher from '../dispatcher/Dispatcher';
 // import WebAPIUtils from "../utils/WebAPIUtils";
 
 const ChannelActions = {
-    userTypingAdd: function(user) {
+    addUsername: function(username) {
+        dispatcher.dispatch({
+            type: 'USER_ADD',
+            username
+        });
+    },
+
+    userTypingAdd: function() {
         dispatcher.dispatch({
            type: 'USER_TYPING_ADD'
         });
     },
 
-    userTypingRemove: function(user) {
+    userTypingRemove: function(username) {
         dispatcher.dispatch({
             type: 'USER_TYPING_REMOVE',
-            user
+            username
         });
     }
 }

@@ -8,7 +8,11 @@ const Styles = {
     padding: '6px 20px',
     color: '#656565',
     fontSize: '10px',
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    height: '23px',
+    p: {
+        margin: 0
+    }
 }
 
 class WhosTyping extends Component {
@@ -49,9 +53,9 @@ class WhosTyping extends Component {
         });
 
 
-        if (usersTyping.indexOf(ChannelStore.getUser() > -1)) {
-            usersTyping.splice(ChannelStore.getUser());
-        }
+        // if (usersTyping.indexOf(ChannelStore.getUser() > -1)) {
+        //     usersTyping.splice(ChannelStore.getUser());
+        // }
 
         let usersTypingPhrase;
 
@@ -71,7 +75,7 @@ class WhosTyping extends Component {
 
         return (
             <div style={ Styles } className="users-typing">
-                { usersTypingPhrase }
+                <p style={ Styles.p}>{ usersTypingPhrase }</p>
             </div>
         );
     }

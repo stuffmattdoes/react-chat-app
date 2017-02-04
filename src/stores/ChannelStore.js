@@ -5,15 +5,30 @@ import dispatcher from '../dispatcher/Dispatcher';
 // Stores
 import MessageStore from './MessageStore';
 
-var _activeUsers;
+var _channelUsers = ['matthew', 'Cool Guy 420'];
 var _userRole = 'Subscriber';
 var CHANGE_EVENT = 'CHANNEL_UPDATE';
 var _usersTyping = [];
 var _username = 'Matthew Morrison';
 
 class ChannelStore extends EventEmitter {
+    addUser(username) {
+        let userExists = _channelUsers.indexOf(username);
+
+        if (userExists < 0) {
+            _username = username;
+        } else {
+
+        }
+
+    }
+
     getUser() {
         return _username;
+    }
+
+    getChannelUsers() {
+        return _channelUsers;
     }
 
     getUserRole() {
@@ -46,11 +61,18 @@ class ChannelStore extends EventEmitter {
 
     handleActions(action) {
         switch(action.type) {
-            case "USER_TYPING_ADD" : {
+            case 'GET_CHANNEL_USERS': {
+                this.getChannelUsers();
+                break;
+            }
+            case 'USER_ADD' : {
+                this.addUser(action.username);
+            }
+            case 'USER_TYPING_ADD' : {
                 this.userTypingAdd();
                 break;
             }
-            case "USER_TYPING_REMOVE" : {
+            case 'USER_TYPING_REMOVE' : {
                 this.userTypingRemove();
                 break;
             }

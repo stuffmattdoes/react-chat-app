@@ -10,7 +10,7 @@ import MessageStore from '../stores/MessageStore';
 const Styles = {
     overflowY: 'scroll',
     padding: '15px',
-    minHeight: '293px'
+    height: '350px'
 }
 
 class MessagesView extends Component {

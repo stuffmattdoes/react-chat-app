@@ -21,14 +21,10 @@ import WebAPIUtils from '../utils/WebAPIUtils';
 const Styles = {
     width: '100%',
     maxWidth: '450px',
-    height: '100%',
-    maxHeight: '450px',
     backgroundColor: 'white',
     margin: '0 auto',
     borderRadius: '2px',
     overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column',
     // webkitBoxShadow: '0 8px 6px -6px rgba(0, 0, 0, 0,15)',
     // mozBoxShadow: '0 8px 6px -6px rgba(0, 0, 0, 0,15)',
     // boxShadow: '0 8px 6px -6px rgba(0, 0, 0, 0,15)'
