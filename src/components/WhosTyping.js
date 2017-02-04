@@ -16,6 +16,7 @@ class WhosTyping extends Component {
         super();
         this.getStateFromStores = this.getStateFromStores.bind(this);
         this.onStoreChange = this.onStoreChange.bind(this);
+        this.determineTypers= this.determineTypers.bind(this);
         this.state = this.getStateFromStores();
     }
 
@@ -42,20 +43,31 @@ class WhosTyping extends Component {
         console.log('Component updated.');
     }
 
-    render() {
+    determineTypers() {
         let usersTyping = this.state.usersTyping.map(user => {
             return user;
         });
+
+
+        if (usersTyping.indexOf(ChannelStore.getUser() > -1)) {
+            usersTyping.splice(ChannelStore.getUser());
+        }
 
         let usersTypingPhrase;
 
         if (usersTyping.length > 3) {
             usersTypingPhrase ='Several people are typing.';
-        } else if (usersTyping.length == 1) {
+        } else if (usersTyping.length === 1) {
             usersTypingPhrase = usersTyping + ' is typing.';
         } else if (usersTyping.length) {
             usersTypingPhrase = usersTyping.join(', ') + ' are typing.';
         }
+
+        return usersTypingPhrase;
+    }
+
+    render() {
+        let usersTypingPhrase = this.determineTypers();
 
         return (
             <div style={ Styles } className="users-typing">
