@@ -3,13 +3,14 @@ import { EventEmitter } from "events";
 import dispatcher from '../dispatcher/Dispatcher';
 
 // Stores
-import MessageStore from './MessageStore';
+// import MessageStore from './MessageStore';
 
 var _channelUsers = ['matthew', 'Cool Guy 420'];
 var _userRole = 'Subscriber';
 var CHANGE_EVENT = 'CHANNEL_UPDATE';
 var _usersTyping = [];
-var _username = 'Matthew Morrison';
+var _username = '';
+var _pubnub = {};
 
 class ChannelStore extends EventEmitter {
     addUser(username) {
@@ -21,6 +22,7 @@ class ChannelStore extends EventEmitter {
 
         }
 
+        this.emit(CHANGE_EVENT);
     }
 
     getUser() {
@@ -37,6 +39,15 @@ class ChannelStore extends EventEmitter {
 
     getUsersTyping() {
         return _usersTyping;
+    }
+
+    pubnubInit(pubnub) {
+        _pubnub = pubnub;
+        this.emit(CHANGE_EVENT);
+    }
+
+    pubnubGet() {
+        return _pubnub;
     }
 
     userTypingAdd() {
@@ -65,8 +76,13 @@ class ChannelStore extends EventEmitter {
                 this.getChannelUsers();
                 break;
             }
+            case 'PUBNUB_INIT': {
+                this.pubnubInit(action.pubnub);
+                break;
+            }
             case 'USER_ADD' : {
                 this.addUser(action.username);
+                break;
             }
             case 'USER_TYPING_ADD' : {
                 this.userTypingAdd();

@@ -1,5 +1,6 @@
 // Libraries
 import React, { Component } from 'react';
+const pubnub = require ('pubnub');
 
 // Styles
 import '../App.css';
@@ -7,14 +8,21 @@ import '../App.css';
 // Components
 import ChatBox from './ChatBox';
 import Header from './Header';
+import Login from './Login';
+
+// import Loading from './Loading';
 import MessagesView from './MessagesView';
 import WhosTyping from './WhosTyping';
 
+// Actions
+import * as ChannelActions from '../actions/ChannelActions';
+
 // Stores
-import * as MessageStore from '../stores/MessageStore';
+// import * as MessageStore from '../stores/MessageStore';
+import ChannelStore from '../stores/ChannelStore';
 
 // API
-import WebAPIUtils from '../utils/WebAPIUtils';
+// import WebAPIUtils from '../utils/WebAPIUtils';
 
 // Load Mock API Call
 // CartAPI.getProductData();
@@ -22,7 +30,7 @@ const Styles = {
     width: '100%',
     maxWidth: '450px',
     backgroundColor: 'white',
-    margin: '0 auto',
+    margin: '0 auto 20px',
     borderRadius: '2px',
     overflow: 'hidden',
     // webkitBoxShadow: '0 8px 6px -6px rgba(0, 0, 0, 0,15)',
@@ -32,22 +40,56 @@ const Styles = {
 
 class App extends Component {
 
+    constructor() {
+        super();
+        this.getStateFromStores = this.getStateFromStores.bind(this);
+        this.onStoreChange = this.onStoreChange.bind(this);
+        this.state = {
+            UUID: ChannelStore.getUser()
+        }
+    }
+
+    getStateFromStores() {
+        return {
+            UUID: ChannelStore.getUser()
+        }
+    }
+
+    onStoreChange () {
+        this.setState(this.getStateFromStores());
+    }
+
     componentWillMount() {
-        /*WebAPIUtils.messagesGetAll().done(() => {
-            this.setState({
-                receivedMessages: true,
-                message: MessageStore.getAllMessages()
-            });
-        });*/
+        // console.log('App mounted');
+        let _pubnub = new pubnub ({
+            publish_key: 'pub-c-08de46b8-b813-4f08-afef-cbdf4dfbe99e',
+            subscribe_key: 'sub-c-92e2d9e2-ea82-11e6-889b-02ee2ddab7fe',
+            uuid: this.state.UUID,
+            error: error => {
+                console.log('Error:', error);
+            }
+        });
+
+        ChannelActions.default.pubnubInit(_pubnub);
+
+        ChannelStore.addListener('CHANNEL_UPDATE', this.onStoreChange );
+    }
+
+    componentWillUnmount() {
+        ChannelStore.removeListener('CHANNEL_UPDATE', this.onStoreChange );
     }
 
     render() {
+
         return (
-            <div style={Styles} className="app">
-                <Header />
-                <MessagesView />
-                <WhosTyping />
-                <ChatBox />
+            <div>
+                <div style={Styles} className="app">
+                    <Header />
+                    <MessagesView />
+                    <WhosTyping />
+                    { this.state.UUID ? <ChatBox /> : <Login /> }
+                </div>
+                <p className="matt-link"> Made by <a href="https://github.com/stuffmattdoes" target="_blank" >Matthew J. Morrison</a></p>
             </div>
 	    );
     }

@@ -5,7 +5,21 @@ import { browserHistory } from 'react-router';
 // Actions
 import * as ChannelActions from '../actions/ChannelActions';
 
+// Stores
+// import ChannelStore from '../stores/ChannelStore';
+
 const Styles = {
+    padding: '15px',
+    textAlign: 'center',
+    borderTop: '1px solid #D8D8D8',
+    input: {
+        margin: '0 auto 10px',
+        display: 'block',
+        border: 'none',
+        padding: '6px',
+        outline: 'none',
+        borderBottom: '1px solid #D8D8D8'
+    },
     submitButton: {
         textTransform: 'uppercase',
         color: 'white',
@@ -68,8 +82,6 @@ class Login extends Component {
                 className="login"
                 style={ Styles }
             >
-                <h1>React Simple Chat</h1>
-                <a href="https://github.com/stuffmattdoes" target="_blank" >Matthew J. Morrison</a>
                 <form onSubmit={this.onSubmit} >
                     <input
                         type="text"
@@ -81,6 +93,7 @@ class Login extends Component {
                     <input
                         type="submit"
                         style={ Styles.submitButton }
+                        value="join"
                     />
                 </form>
 

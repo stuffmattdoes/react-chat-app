@@ -2,8 +2,11 @@
 import React, { Component } from 'react';
 
 // Actions
-import * as MessageActions from '../actions/MessageActions';
-import * as ChannelActions from '../actions/ChannelActions';
+// import * as MessageActions from '../actions/MessageActions';
+// import * as ChannelActions from '../actions/ChannelActions';
+
+// Stores
+import ChannelStore from '../stores/ChannelStore';
 
 const Styles = {
     form: {
@@ -47,7 +50,9 @@ class ChatBox extends Component {
 
         // Constructors are also a good place to initialize state
         this.state = {
-            message: ''
+            pubnub: ChannelStore.pubnubGet(),
+            message: '',
+            UUID: ChannelStore.getUser()
         }
     }
 
@@ -60,11 +65,11 @@ class ChatBox extends Component {
     onTextChange(e) {
         const inputValue = e.target.value;
 
-        if (inputValue !== '') {
-            ChannelActions.default.userTypingAdd();
-        } else {
-            ChannelActions.default.userTypingRemove();
-        }
+        // if (inputValue !== '') {
+        //     ChannelActions.default.userTypingAdd();
+        // } else {
+        //     ChannelActions.default.userTypingRemove();
+        // }
 
         this.setState({
             message: inputValue
@@ -80,12 +85,31 @@ class ChatBox extends Component {
             return;
         }
 
-        ChannelActions.default.userTypingRemove();
+        // this.props.publishMessage(this.state.message);
+
+        // ChannelActions.default.userTypingRemove();
 
         // Dispatch message here
-        MessageActions.default.messageCreate(
-            this.state.message
-        );
+        // MessageActions.default.messageCreate(
+        //     this.state.message
+        // );
+        //
+
+        let messageObj = {
+            Who: this.state.UUID,
+            What: this.state.message,
+            When: new Date().valueOf()
+        }
+
+        console.log(messageObj);
+
+        this.state.pubnub.publish({
+            channel: 'Messages',
+            message: messageObj
+        },
+        (status, response) => {
+            console.log(status, response);
+        });
 
         this.setState({
             message: ''

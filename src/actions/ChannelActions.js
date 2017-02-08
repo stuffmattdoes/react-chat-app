@@ -20,6 +20,13 @@ const ChannelActions = {
             type: 'USER_TYPING_REMOVE',
             username
         });
+    },
+
+    pubnubInit: function(pubnub) {
+        dispatcher.dispatch({
+            type: 'PUBNUB_INIT',
+            pubnub
+        })
     }
 }
 
