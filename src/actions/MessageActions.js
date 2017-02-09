@@ -1,13 +1,16 @@
 import dispatcher from '../dispatcher/Dispatcher';
-// import WebAPIUtils from "../utils/WebAPIUtils";
+import WebAPIUtils from "../utils/WebAPIUtils";
 
 const MessageActions = {
 
-    messageCreate: function(messageText) {
+    messageCreate: function(pubnub, channel, message) {
         dispatcher.dispatch({
-            type: 'CREATE_MESSAGE',
-            messageText
+            type: 'MESSAGE_CREATE',
+            message
         });
+
+        WebAPIUtils.messagePublish(pubnub, channel, message);
+
     }
 
 }

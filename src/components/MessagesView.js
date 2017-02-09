@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 // Components
 import Message from './Message';
 
+// Actions
+import * as ChannelActions from '../actions/ChannelActions';
+
 // Stores
-// import MessageStore from '../stores/MessageStore';
+import MessageStore from '../stores/MessageStore';
 import ChannelStore from '../stores/ChannelStore';
 
 const Styles = {
@@ -18,59 +21,35 @@ class MessagesView extends Component {
 
     constructor(props) {
         super(props);
-        // this.getStateFromStores = this.getStateFromStores.bind(this);
-        // this.onStoreChange  = this.onStoreChange.bind(this);
-        // this.state = this.getStateFromStores().bind(this);
+        this.getStateFromStores = this.getStateFromStores.bind(this);
+        this.onStoreChange  = this.onStoreChange.bind(this);
         this.state = {
             pubnub: ChannelStore.pubnubGet(),
-            history: []
+            messages: MessageStore.getAllMessages(),
+            channel: ChannelStore.getChannel()
         }
-
-        console.log(this.state.pubnub);
     }
 
-    // getStateFromStores() {
-    //     return {
-    //         messages: MessageStore.getAllMessages()
-    //     }
-    // }
-    //
-    // onStoreChange () {
-    //     this.setState(this.getStateFromStores());
-    // }
+    getStateFromStores() {
+        return {
+            messages: MessageStore.getAllMessages()
+        }
+    }
+
+    onStoreChange () {
+        console.log('onStoreChange');
+        this.setState(this.getStateFromStores());
+    }
 
     componentDidMount() {
         // Subscribe to our store so we know when something changes, triggering a render update
-        // MessageStore.addListener('MESSAGES_UPDATE', this.onStoreChange );
-
-        this.state.pubnub.subscribe({
-            channel: 'Messages',
-            // widthPresence: true,
-            message: (message) => {
-                console.log('Subscribe:', message);
-                this.setState({
-                    history: this.state.history.concat(message)
-                });
-            },
-            connect: () => {
-                console.log("Connected");
-            },
-            disconnect: () => {
-                console.log("Disconnected");
-            },
-            reconnect: () => {
-                console.log("Reconnected");
-            },
-            error: () => {
-                console.log("Network Error");
-            }
-        });
-
+        ChannelActions.default.channelSubscribe(this.state.pubnub, this.state.channel);
+        MessageStore.addListener('MESSAGES_UPDATE', this.onStoreChange );
     }
 
-    // componentWillUnmount() {
-    //     MessageStore.removeListener('MESSAGES_UPDATE', this.onStoreChange );
-    // }
+    componentWillUnmount() {
+        MessageStore.removeListener('MESSAGES_UPDATE', this.onStoreChange );
+    }
 
     componentDidUpdate() {
         let scrollDummy = document.getElementById('scroll-dummy');
@@ -84,12 +63,13 @@ class MessagesView extends Component {
     render() {
         return(
           <div style={ Styles } className="app-messages-view">
-              {this.state.history.map(message => {
+              {this.state.messages.map(message => {
                   return (
                     <Message
-                        author={ message.Who }
-                        text={ message.What }
-                        key={ message.When}
+                        author={ message.author }
+                        text={ message.text }
+                        timestamp={ message.timestamp}
+                        key={ message.timestamp }
                     />
                   );
               })}

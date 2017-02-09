@@ -17,7 +17,15 @@ const Styles = {
 }
 
 class Message extends Component {
+
+    static propTypes = {
+        author: React.PropTypes.string,
+        text: React.PropTypes.string,
+        timestamp: React.PropTypes.number
+    }
+
     render() {
+        console.log(this.props.author, this.props.text, this.props.timestamp);
         return(
             <div style={ Styles } className="message-single">
                 <p style={ Styles.author } >{this.props.author}</p>

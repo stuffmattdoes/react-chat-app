@@ -1,5 +1,5 @@
 import dispatcher from '../dispatcher/Dispatcher';
-// import WebAPIUtils from "../utils/WebAPIUtils";
+import WebAPIUtils from "../utils/WebAPIUtils";
 
 const ChannelActions = {
     addUsername: function(username) {
@@ -9,20 +9,24 @@ const ChannelActions = {
         });
     },
 
+    channelSubscribe: function(pubnub, channel) {
+        WebAPIUtils.channelSubscribe(pubnub, channel);
+    },
+
     userTypingAdd: function() {
         dispatcher.dispatch({
            type: 'USER_TYPING_ADD'
         });
     },
 
-    userTypingRemove: function(username) {
+    userTypingRemove: function() {
         dispatcher.dispatch({
-            type: 'USER_TYPING_REMOVE',
-            username
+            type: 'USER_TYPING_REMOVE'
         });
     },
 
     pubnubInit: function(pubnub) {
+
         dispatcher.dispatch({
             type: 'PUBNUB_INIT',
             pubnub

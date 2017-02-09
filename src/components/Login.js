@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router';
 import * as ChannelActions from '../actions/ChannelActions';
 
 // Stores
-// import ChannelStore from '../stores/ChannelStore';
+import ChannelStore from '../stores/ChannelStore';
 
 const Styles = {
     padding: '15px',
@@ -18,7 +18,8 @@ const Styles = {
         border: 'none',
         padding: '6px',
         outline: 'none',
-        borderBottom: '1px solid #D8D8D8'
+        borderBottom: '1px solid #D8D8D8',
+        textAlign: 'center'
     },
     submitButton: {
         textTransform: 'uppercase',
@@ -43,6 +44,7 @@ class Login extends Component {
         this.onTextChange= this.onTextChange.bind(this);
         this.submitUsername = this.submitUsername.bind(this);
         this.state = {
+            pubnub: ChannelStore.pubnubGet(),
             username: ''
         }
     }
@@ -86,7 +88,7 @@ class Login extends Component {
                     <input
                         type="text"
                         style={ Styles.input }
-                        placeholder="Type a nickname"
+                        placeholder="Enter a nickname"
                         onKeyDown={ this.onKeyDown }
                         onChange={ this.onTextChange }
                     />

@@ -6,33 +6,40 @@ import dispatcher from '../dispatcher/Dispatcher';
 import ChannelStore from './ChannelStore';
 
 var _messages = [];
-var _username = 'Matthew Morrison';
 const CHANGE_EVENT = 'MESSAGES_UPDATE';
 
 class MessageStore extends EventEmitter {
     getAllMessages() {
+        // console.log(_messages);
         return _messages;
     }
 
-    messageCreate(messageText) {
+    messageCreate(message) {
+
         var newMessage = {
-            id: 'm_1',
-            author: ChannelStore.getUser(),
-            text: messageText,
-            timestamp: Date.now()
+            author: message.Who,
+            text: message.What,
+            timestamp: message.When
         }
 
-        // console.log(newItem);
-
         _messages.push(newMessage);
+        this.emit(CHANGE_EVENT);
+    }
 
+    messageReceive(message) {
+        console.log('Message received:', message);
+        _messages.push(message);
         this.emit(CHANGE_EVENT);
     }
 
     handleActions(action) {
         switch(action.type) {
-            case "CREATE_MESSAGE" : {
-                this.messageCreate(action.messageText);
+            case "MESSAGE_CREATE" : {
+                this.messageCreate(action.message);
+                break;
+            }
+            case 'MESSAGE_RECEIVE': {
+                this.messageReceive(action.message);
                 break;
             }
             default : {

@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 
 // Actions
-// import * as MessageActions from '../actions/MessageActions';
-// import * as ChannelActions from '../actions/ChannelActions';
+import * as MessageActions from '../actions/MessageActions';
+import * as ChannelActions from '../actions/ChannelActions';
 
 // Stores
 import ChannelStore from '../stores/ChannelStore';
@@ -52,7 +52,8 @@ class ChatBox extends Component {
         this.state = {
             pubnub: ChannelStore.pubnubGet(),
             message: '',
-            UUID: ChannelStore.getUser()
+            UUID: ChannelStore.getUser(),
+            channel: ChannelStore.getChannel()
         }
     }
 
@@ -65,11 +66,11 @@ class ChatBox extends Component {
     onTextChange(e) {
         const inputValue = e.target.value;
 
-        // if (inputValue !== '') {
-        //     ChannelActions.default.userTypingAdd();
-        // } else {
-        //     ChannelActions.default.userTypingRemove();
-        // }
+        if (inputValue !== '') {
+            ChannelActions.default.userTypingAdd();
+        } else {
+            ChannelActions.default.userTypingRemove();
+        }
 
         this.setState({
             message: inputValue
@@ -85,31 +86,14 @@ class ChatBox extends Component {
             return;
         }
 
-        // this.props.publishMessage(this.state.message);
-
-        // ChannelActions.default.userTypingRemove();
-
-        // Dispatch message here
-        // MessageActions.default.messageCreate(
-        //     this.state.message
-        // );
-        //
-
         let messageObj = {
             Who: this.state.UUID,
             What: this.state.message,
             When: new Date().valueOf()
         }
 
-        console.log(messageObj);
-
-        this.state.pubnub.publish({
-            channel: 'Messages',
-            message: messageObj
-        },
-        (status, response) => {
-            console.log(status, response);
-        });
+        ChannelActions.default.userTypingRemove();
+        MessageActions.default.messageCreate(this.state.pubnub, this.state.channel, messageObj);
 
         this.setState({
             message: ''

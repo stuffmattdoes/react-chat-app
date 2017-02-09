@@ -5,12 +5,13 @@ import dispatcher from '../dispatcher/Dispatcher';
 // Stores
 // import MessageStore from './MessageStore';
 
-var _channelUsers = ['matthew', 'Cool Guy 420'];
-var _userRole = 'Subscriber';
-var CHANGE_EVENT = 'CHANNEL_UPDATE';
-var _usersTyping = [];
-var _username = '';
-var _pubnub = {};
+let _channelUsers = ['matthew', 'Cool Guy 420'];
+let _userRole = 'Subscriber';
+let CHANGE_EVENT = 'CHANNEL_UPDATE';
+let _usersTyping = [];
+let _username = '';
+let _pubnub = {};
+let _currentChannel = 'GeneralChat';
 
 class ChannelStore extends EventEmitter {
     addUser(username) {
@@ -39,6 +40,15 @@ class ChannelStore extends EventEmitter {
 
     getUsersTyping() {
         return _usersTyping;
+    }
+
+    getChannel() {
+        return _currentChannel;
+    }
+
+    setChannel(channel) {
+        _currentChannel = channel;
+        this.emit(CHANGE_EVENT);
     }
 
     pubnubInit(pubnub) {

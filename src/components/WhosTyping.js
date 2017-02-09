@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 // Stores
-// import ChannelStore from '../stores/ChannelStore';
+import ChannelStore from '../stores/ChannelStore';
 
 const Styles = {
     padding: '6px 20px',
@@ -10,13 +10,13 @@ const Styles = {
     fontSize: '10px',
     fontStyle: 'italic',
     height: '23px',
+    textAlign: 'left',
     p: {
         margin: 0
     }
 }
 
 class WhosTyping extends Component {
-    /*
     constructor() {
         super();
         this.getStateFromStores = this.getStateFromStores.bind(this);
@@ -44,19 +44,15 @@ class WhosTyping extends Component {
         ChannelStore.removeListener('CHANNEL_UPDATE', this.onStoreChange );
     }
 
-    componentDidUpdate() {
-        console.log('Component updated.');
-    }
-
     determineTypers() {
         let usersTyping = this.state.usersTyping.map(user => {
             return user;
         });
 
-
-        // if (usersTyping.indexOf(ChannelStore.getUser() > -1)) {
-        //     usersTyping.splice(ChannelStore.getUser());
-        // }
+        // Remove self from typing indicator
+        if (usersTyping.indexOf(ChannelStore.getUser() > -1)) {
+            usersTyping.splice(ChannelStore.getUser());
+        }
 
         let usersTypingPhrase;
 
@@ -70,14 +66,13 @@ class WhosTyping extends Component {
 
         return usersTypingPhrase;
     }
-    */
 
     render() {
-        // let usersTypingPhrase = this.determineTypers();
+        let usersTypingPhrase = this.determineTypers();
 
         return (
             <div style={ Styles } className="users-typing">
-                <p style={ Styles.p}>{''}</p>
+                <p style={ Styles.p}>{ usersTypingPhrase }</p>
             </div>
         );
     }
